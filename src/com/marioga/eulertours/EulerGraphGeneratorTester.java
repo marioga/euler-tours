@@ -12,7 +12,7 @@ public class EulerGraphGeneratorTester {
     private static final Random RND = new Random();
     private static final int VERTEX_MEAN = 6;
     private static final int HALF_DEGREE_UPPER_BOUND = 3;
-    
+
     private static int findVertex(int[] degrees, int guess) {
         int total = 0;
         int i = 0;
@@ -21,7 +21,7 @@ public class EulerGraphGeneratorTester {
         }
         return i - 1;
     }
-    
+
     public static void main(String[] args) {
         try {
             OutputStream os = new FileOutputStream(FILENAME);

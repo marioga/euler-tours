@@ -17,13 +17,13 @@ public class EulerTourFinder {
     private Deque<Integer> mUnexploredInCycle;
     private int mEdgesInCycles = 0;
     private boolean mCycleFound;
-    
+
     private int mV;
     private int mE;
-    private HashMap<Integer, HashMap<Integer, Integer>> mUnusedEdges = 
+    private HashMap<Integer, HashMap<Integer, Integer>> mUnusedEdges =
             new HashMap<>();
     private int[] mUnusedDegrees;
-    
+
     public EulerTourFinder(String fileName) {
         // Read graph from file
         BufferedReader reader = null;
@@ -66,7 +66,7 @@ public class EulerTourFinder {
         mUnexploredInCycle.push(0);
         computeTour();
     }
-    
+
     private void addEdge(int v, int w) {
         if (mUnusedEdges.get(v) == null) {
             mUnusedEdges.put(v, new HashMap<Integer, Integer>());
@@ -79,12 +79,12 @@ public class EulerTourFinder {
                     mUnusedEdges.get(v).get(w) + 1);
         }
     }
-    
+
     private void computeTour() {
         // These arrays are reused in every DFS
         boolean[] marked = new boolean[mV];
         int[] edgeTo = new int[mV];
-        
+
         while (mEdgesInCycles < mE) {
             int v = -1;
             if (!mUnexploredInCycle.isEmpty()) {
@@ -94,7 +94,7 @@ public class EulerTourFinder {
                 mEulerTour = new ArrayDeque<>();
                 return;
             }
-            
+
             if (mUnusedDegrees[v] > 0) {
                 computeSelfCycles(v);
                 computeParallelEdges(v);
@@ -112,14 +112,14 @@ public class EulerTourFinder {
             mEulerTour.offerFirst(mUnexploredInCycle.pop());
         }
     }
-    
+
     private void removeEdge(int v, int w) {
         mUnusedEdges.get(v).put(w, mUnusedEdges.get(v).get(w) - 1);
         mUnusedEdges.get(w).put(v, mUnusedEdges.get(w).get(v) - 1);
         mUnusedDegrees[v]--;
         mUnusedDegrees[w]--;
     }
-    
+
     private void computeSelfCycles(int v) {
         if (mUnusedEdges.get(v).containsKey(v)) {
             int selfDegree = mUnusedEdges.get(v).get(v);
@@ -132,7 +132,7 @@ public class EulerTourFinder {
             mUnusedEdges.get(v).put(v, 0);
         }
     }
-    
+
     private void computeParallelEdges(int v) {
         for (int w : mUnusedEdges.get(v).keySet()) {
             while (mUnusedEdges.get(v).get(w) >= 2) {
@@ -144,7 +144,7 @@ public class EulerTourFinder {
             }
         }
     }
-    
+
     private void computeCycleFrom(int base, int prev, int curr,
             boolean[] marked, int[] edgeTo) {
         marked[curr] = true;
@@ -174,15 +174,15 @@ public class EulerTourFinder {
             }
         }
     }
-    
+
     public boolean hasEulerTour() {
         return mEulerTour.iterator().hasNext();
     }
-    
+
     public Iterable<Integer> tour() {
         return mEulerTour;
     }
-    
+
     public static void main(String[] args) {
         EulerTourFinder finder = new EulerTourFinder(args[0]);
         OutputStream os;
@@ -192,10 +192,10 @@ public class EulerTourFinder {
             PrintWriter out = new PrintWriter(osw);
             if (finder.hasEulerTour()) {
                 for (int s : finder.tour()) {
-                    out.write(s + " ");
+                    out.write(s + "\n");
                 }
             } else {
-                out.write("Not Eulerian");
+                out.write("Not Eulerian!\n");
             }
             out.close();
         } catch (IOException e) {
